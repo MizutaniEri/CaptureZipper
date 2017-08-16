@@ -60,7 +60,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(506, 24);
             this.textBox1.TabIndex = 0;
-            this.textBox1.Text = "C:\\User\\Book\\Capture001.zip";
+            this.textBox1.Text = "C:\\User\\Book\\Capture002.zip";
             // 
             // button1
             // 
@@ -109,7 +109,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(249, 210);
+            this.button2.Location = new System.Drawing.Point(270, 249);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 35);
             this.button2.TabIndex = 8;
@@ -143,7 +143,7 @@
             this.groupBox1.Controls.Add(this.numericUpDown2);
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Location = new System.Drawing.Point(249, 53);
+            this.groupBox1.Location = new System.Drawing.Point(247, 73);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(330, 130);
             this.groupBox1.TabIndex = 9;
@@ -232,7 +232,7 @@
             // 
             // numericUpDown6
             // 
-            this.numericUpDown6.Location = new System.Drawing.Point(77, 188);
+            this.numericUpDown6.Location = new System.Drawing.Point(79, 184);
             this.numericUpDown6.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -243,7 +243,7 @@
             this.numericUpDown6.TabIndex = 11;
             this.numericUpDown6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown6.Value = new decimal(new int[] {
-            30,
+            31,
             0,
             0,
             0});
@@ -251,7 +251,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 190);
+            this.label6.Location = new System.Drawing.Point(14, 186);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(42, 17);
             this.label6.TabIndex = 10;
@@ -261,7 +261,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(625, 274);
+            this.ClientSize = new System.Drawing.Size(625, 309);
             this.Controls.Add(this.numericUpDown6);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.groupBox1);

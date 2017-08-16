@@ -17,7 +17,7 @@ namespace CaptureZipper
 {
     public partial class Form1 : Form
     {
-        private readonly long quality = 95;
+        private readonly long quality = 100;
         private EncoderParameters eps;
         private EncoderParameter ep;
         private ImageCodecInfo ici;
@@ -106,6 +106,7 @@ namespace CaptureZipper
                             }
                             //new SoundPlayer(@"C:\Windows\Media\Windows Exclamation.wav").PlaySync();
                             //Thread.Sleep((int)numericUpDown5.Value/2);
+                            SendKeys.SendWait("{LEFT}");
                         }
                     });
                 }
