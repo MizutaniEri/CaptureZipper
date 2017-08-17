@@ -104,13 +104,12 @@ namespace CaptureZipper
                                 len -= wlen;
                                 offset += wlen;
                             }
-                            //new SoundPlayer(@"C:\Windows\Media\Windows Exclamation.wav").PlaySync();
-                            //Thread.Sleep((int)numericUpDown5.Value/2);
                             SendKeys.SendWait("{LEFT}");
                         }
                     });
                 }
             }
+            new SoundPlayer(@"C:\Windows\Media\Windows Print complete.wav").PlaySync();
             Show();
         }
 
