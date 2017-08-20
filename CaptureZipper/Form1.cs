@@ -83,13 +83,13 @@ namespace CaptureZipper
                             var memStream = new MemoryStream();
                             //var iformat = ImageFormat.Jpeg;
                             // 画像をメモリストリームに保存する(指定の画像形式で)
-                            int width = (int)(numericUpDown3.Value - numericUpDown1.Value);
-                            int height = (int)(numericUpDown4.Value - numericUpDown2.Value);
+                            int width = (int)(rightBottomXNumericUpDown3.Value - leftTopXNumericUpDown1.Value);
+                            int height = (int)(rightBottomYNumericUpDown4.Value - leftTopYNumericUpDown2.Value);
                             var img = new Bitmap(width, height);
                             var grp = Graphics.FromImage(img);
-                            int leftX = (int)numericUpDown1.Value;
-                            int leftY = (int)numericUpDown2.Value;
-                            grp.CopyFromScreen(new Point(leftX, leftY), new Point(leftX, leftY), img.Size);
+                            int leftX = (int)leftTopXNumericUpDown1.Value;
+                            int leftY = (int)leftTopYNumericUpDown2.Value;
+                            grp.CopyFromScreen(new Point(leftX, leftY), new Point(0, 0), img.Size);
                             grp.Dispose();
                             //img.Save(memStream, iformat);
                             img.Save(memStream, ici, eps);

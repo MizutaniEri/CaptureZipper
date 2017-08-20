@@ -81,4 +81,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" C:\User\Tools\$(TargetName).exe</PostBuildEvent>
+  </PropertyGroup>
 </Project>
