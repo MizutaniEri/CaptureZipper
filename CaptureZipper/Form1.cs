@@ -22,6 +22,7 @@ namespace CaptureZipper
         private EncoderParameter ep;
         private ImageCodecInfo ici;
         private bool cancelFlag = false;
+        private BackgroundWorker backgroundWorker1;
 
         public Form1()
         {
@@ -67,7 +68,7 @@ namespace CaptureZipper
         {
             return ImageCodecInfo.GetImageEncoders().ToList().Find(enc => enc.FormatID == f.Guid);
         }
-        private void saveZipFile(string FileName)
+        private void saveZipFile()
         {
             Hide();
             notifyIcon1.Visible = true;
@@ -79,6 +80,9 @@ namespace CaptureZipper
             int leftY = (int)leftTopYNumericUpDown2.Value;
             int interval = (int)numericUpDown5.Value;
             int lastNumber = (int)numericUpDown6.Value;
+            var FileName = textBox1.Text;
+            backgroundWorker1 = new BackgroundWorker();
+            backgroundWorker1.WorkerSupportsCancellation = true;
             backgroundWorker1.DoWork += (seder, e) =>
             {
                 using (var zto = new FileStream(FileName, FileMode.Create))
@@ -89,6 +93,7 @@ namespace CaptureZipper
                         {
                             if (cancelFlag)
                             {
+                                zipArc.Dispose();
                                 return;
                             }
                             new SoundPlayer(@"C:\Windows\Media\Windows Error.wav").PlaySync();
@@ -134,7 +139,7 @@ namespace CaptureZipper
 
         private void button2_Click(object sender, EventArgs e)
         {
-            saveZipFile(textBox1.Text);
+            saveZipFile();
         }
 
         private void cancelToolStripMenuItem_Click(object sender, EventArgs e)
