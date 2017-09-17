@@ -21,11 +21,14 @@ namespace CaptureZipper
         private EncoderParameters eps;
         private EncoderParameter ep;
         private ImageCodecInfo ici;
+        private bool cancelFlag = false;
 
         public Form1()
         {
             InitializeComponent();
             JpegQualitySetting();
+            leftTopXComboBox.SelectedIndex = 1;
+            rightBottomXComboBox.SelectedIndex = 1;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -67,55 +70,76 @@ namespace CaptureZipper
         private void saveZipFile(string FileName)
         {
             Hide();
+            notifyIcon1.Visible = true;
+            cancelFlag = false;
             Thread.Sleep(100);
-            using (var zto = new FileStream(FileName, FileMode.Create))
+            int width = (int)(int.Parse(rightBottomXComboBox.Text) - int.Parse(leftTopXComboBox.Text));
+            int height = (int)(rightBottomYNumericUpDown4.Value - leftTopYNumericUpDown2.Value);
+            int leftX = int.Parse(leftTopXComboBox.Text);
+            int leftY = (int)leftTopYNumericUpDown2.Value;
+            int interval = (int)numericUpDown5.Value;
+            int lastNumber = (int)numericUpDown6.Value;
+            backgroundWorker1.DoWork += (seder, e) =>
             {
-                using (var zipArc = new ZipArchive(zto, ZipArchiveMode.Create))
+                using (var zto = new FileStream(FileName, FileMode.Create))
                 {
-                    Enumerable.Range(1, (int)numericUpDown6.Value).ToList().ForEach(number =>
+                    using (var zipArc = new ZipArchive(zto, ZipArchiveMode.Create))
                     {
-                        new SoundPlayer(@"C:\Windows\Media\Windows Error.wav").PlaySync();
-                        Thread.Sleep((int)numericUpDown5.Value);
-                        var imageFileName = BaseNameTextBox.Text + number.ToString("D2") + ".jpg";
-                        var entry = zipArc.CreateEntry(imageFileName);
-                        using (var writer = entry.Open())
+                        Enumerable.Range(1, lastNumber).ToList().ForEach(number =>
                         {
-                            var memStream = new MemoryStream();
-                            //var iformat = ImageFormat.Jpeg;
-                            // 画像をメモリストリームに保存する(指定の画像形式で)
-                            int width = (int)(rightBottomXNumericUpDown3.Value - leftTopXNumericUpDown1.Value);
-                            int height = (int)(rightBottomYNumericUpDown4.Value - leftTopYNumericUpDown2.Value);
-                            var img = new Bitmap(width, height);
-                            var grp = Graphics.FromImage(img);
-                            int leftX = (int)leftTopXNumericUpDown1.Value;
-                            int leftY = (int)leftTopYNumericUpDown2.Value;
-                            grp.CopyFromScreen(new Point(leftX, leftY), new Point(0, 0), img.Size);
-                            grp.Dispose();
-                            //img.Save(memStream, iformat);
-                            img.Save(memStream, ici, eps);
-                            long len = memStream.Length;
-                            int baseSize = int.MaxValue;
-                            int offset = 0;
-                            var buf = memStream.ToArray();
-                            while (len > 0)
+                            if (cancelFlag)
                             {
-                                int wlen = len > baseSize ? baseSize : (int)len;
-                                writer.Write(buf, offset, wlen);
-                                len -= wlen;
-                                offset += wlen;
+                                return;
                             }
-                            SendKeys.SendWait("{LEFT}");
-                        }
-                    });
+                            new SoundPlayer(@"C:\Windows\Media\Windows Error.wav").PlaySync();
+                            Thread.Sleep(interval);
+                            var imageFileName = BaseNameTextBox.Text + number.ToString("D2") + ".png";// ".jpg";
+                            var entry = zipArc.CreateEntry(imageFileName);
+                            using (var writer = entry.Open())
+                            {
+                                var memStream = new MemoryStream();
+                                //var iformat = ImageFormat.Jpeg;
+                                // 画像をメモリストリームに保存する(指定の画像形式で)
+                                var img = new Bitmap(width, height);
+                                var grp = Graphics.FromImage(img);
+                                grp.CopyFromScreen(new Point(leftX, leftY), new Point(0, 0), img.Size);
+                                grp.Dispose();
+                                img.Save(memStream, ImageFormat.Png);
+                                //img.Save(memStream, ici, eps);
+                                long len = memStream.Length;
+                                int baseSize = int.MaxValue;
+                                int offset = 0;
+                                var buf = memStream.ToArray();
+                                while (len > 0)
+                                {
+                                    int wlen = len > baseSize ? baseSize : (int)len;
+                                    writer.Write(buf, offset, wlen);
+                                    len -= wlen;
+                                    offset += wlen;
+                                }
+                                SendKeys.SendWait("{LEFT}");
+                            }
+                        });
+                    }
                 }
-            }
-            new SoundPlayer(@"C:\Windows\Media\Windows Print complete.wav").PlaySync();
-            Show();
+            };
+            backgroundWorker1.RunWorkerCompleted += (sender, e) =>
+            {
+                new SoundPlayer(@"C:\Windows\Media\Windows Print complete.wav").PlaySync();
+                notifyIcon1.Visible = false;
+                Show();
+            };
+            backgroundWorker1.RunWorkerAsync();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             saveZipFile(textBox1.Text);
+        }
+
+        private void cancelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            cancelFlag = true;
         }
     }
 }
